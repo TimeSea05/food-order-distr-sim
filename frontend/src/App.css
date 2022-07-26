@@ -1,0 +1,14 @@
+.App {
+  max-width: 400px;
+  padding: 15px;
+  margin: 25px auto;
+}
+
+.input {
+  margin-bottom: 25px;
+}
+
+.button {
+  display: relative;
+  text-align: center;
+}
