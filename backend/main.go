@@ -11,14 +11,15 @@ import (
 
 func main() {
 	database.Connect()
-	utilities.ProcessOrder()
-	// utilities.RegisterRandomCouriers()
-	app := fiber.New()
-	app.Use(cors.New(cors.Config{
-		AllowCredentials: true,
-	}))
+	go func() {
+		app := fiber.New()
+		app.Use(cors.New(cors.Config{
+			AllowCredentials: true,
+		}))
 
-	app.Post("/api/order", controllers.OrderLogger)
+		app.Post("/api/order", controllers.OrderLogger)
+		app.Listen(":8000")
+	}()
 
-	app.Listen(":8000")
+	utilities.RunProcessOrderTask()
 }
