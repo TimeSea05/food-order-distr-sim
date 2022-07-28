@@ -24,7 +24,8 @@ func OrderLogger(c *fiber.Ctx) error {
 		Position:  data["position"],
 	}
 
-	log.Println("Received Food Order: ", &order)
+	log.Printf("\033[1;33m*Receiced a food order, \033[1;34mID: %d\033[0m %s", order.ID, order.String())
+
 	database.DB.Create(&order)
 
 	return c.JSON(order)

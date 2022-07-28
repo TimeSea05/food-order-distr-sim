@@ -12,8 +12,8 @@ type Order struct {
 
 func (order *Order) String() string {
 	return fmt.Sprintf(
-		"{ ID: %d, username: %s, orderlist: %s, price: %s, position: %s }",
-		order.ID, order.Username, order.OrderList,
+		"{username: %s, orderlist: %s, price: %s, position: %s }",
+		order.Username, order.OrderList,
 		order.Price, order.Position,
 	)
 }

@@ -1,7 +1,7 @@
 package utilities
 
 import (
-	"fmt"
+	"log"
 	"sync"
 	"time"
 
@@ -14,7 +14,7 @@ var wg sync.WaitGroup
 var mutex sync.Mutex
 
 // Producer
-func GetOrder() {
+func getOrder() {
 	wg.Add(1)
 
 	for {
@@ -23,20 +23,19 @@ func GetOrder() {
 		// Do remember to delete it from the database
 		mutex.Lock()
 		var order models.Order
-		for database.DB.First(&order).Error != nil {
+		if database.DB.First(&order).Error != nil {
 			mutex.Unlock()
-			time.Sleep(time.Millisecond * 50)
-			mutex.Lock()
+			continue
 		}
-		mutex.Unlock()
 
 		orderChannel <- order
 		database.DB.Model(&models.Order{}).Where("id = ?", order.ID).Delete(&order)
+		mutex.Unlock()
 	}
 }
 
 // Consumer
-func ProcessOrder() {
+func processOrder() {
 	wg.Add(1)
 
 	for {
@@ -78,17 +77,17 @@ func ProcessOrder() {
 
 		// The current order finished. The selected courier is also free now
 		database.DB.Model(&models.Courier{}).Where("name = ?", selectedCourier.Name).Update("is_available", 1)
-		fmt.Printf("Order processed. ID: %d\n", order.ID)
+		log.Printf("\033[1;32mOrder processed. \033[1;34mID: %d.\033[0m", order.ID)
 	}
 }
 
 func RunProcessOrderTask() {
 	for i := 0; i < 4; i++ {
-		go GetOrder()
+		go getOrder()
 	}
 
 	for i := 0; i < 32; i++ {
-		go ProcessOrder()
+		go processOrder()
 	}
 
 	wg.Wait()
