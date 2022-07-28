@@ -6,7 +6,7 @@ import getRandomOrder from './random-lib'
  * Customarily, we set the `average` the average number of food orders per minute
  */
 async function PoissonDistrSim (avg, time) {
-  const INTERVAL = 50
+  const INTERVAL = 25
   const prob = avg / (time * 1000 / INTERVAL)
 
   let count = 0
