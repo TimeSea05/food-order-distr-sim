@@ -1,7 +1,7 @@
 import React from 'react'
 import './App.css'
 import { Button, Form } from 'rsuite'
-import PoissonReqSim from './utilities/Possion-Simulation'
+import PoissonReqSim from './utilities/Poisson-Simulation'
 
 function App () {
   const [simTime, setSimTime] = React.useState(0)
