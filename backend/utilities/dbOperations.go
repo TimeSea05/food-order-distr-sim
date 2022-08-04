@@ -15,8 +15,6 @@ var mutex sync.Mutex
 
 // Producer
 func getOrder() {
-	wg.Add(1)
-
 	for {
 		// Take a order from the database, then put it into the channel
 		// When there is no order in the database, then wait
@@ -36,8 +34,6 @@ func getOrder() {
 
 // Consumer
 func processOrder() {
-	wg.Add(1)
-
 	for {
 		order := <-orderChannel
 		userPosition := order.Position
@@ -83,10 +79,12 @@ func processOrder() {
 
 func RunProcessOrderTask() {
 	for i := 0; i < 4; i++ {
+		wg.Add(1)
 		go getOrder()
 	}
 
 	for i := 0; i < 32; i++ {
+		wg.Add(1)
 		go processOrder()
 	}
 
